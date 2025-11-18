@@ -6,7 +6,7 @@
 /*   By: vpoelman <vpoelman@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 14:03:13 by vpoelman          #+#    #+#             */
-/*   Updated: 2025/10/18 00:02:59 by vpoelman         ###   ########.fr       */
+/*   Updated: 2025/11/16 21:04:33 by vpoelman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,13 +69,17 @@ int	should_expand_variable(char *word)
 {
 	int	i;
 	int	in_single_quotes;
+	int	in_double_quotes;
 
 	i = 0;
 	in_single_quotes = 0;
+	in_double_quotes = 0;
 	while (word[i])
 	{
-		if (word[i] == '\'')
+		if (word[i] == '\'' && !in_double_quotes)
 			in_single_quotes = !in_single_quotes;
+		else if (word[i] == '"' && !in_single_quotes)
+			in_double_quotes = !in_double_quotes;
 		else if (word[i] == '$' && !in_single_quotes)
 			return (1);
 		i++;

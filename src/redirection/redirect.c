@@ -32,7 +32,7 @@ static int	open_and_dup(char *file, int flags, int target_fd, int mode)
 	return (0);
 }
 
-static void	handle_heredoc_error(t_shell *shell, int child_mode)
+static void	handle_redir_error(t_shell *shell, int child_mode)
 {
 	if (child_mode)
 	{
@@ -42,6 +42,8 @@ static void	handle_heredoc_error(t_shell *shell, int child_mode)
 	}
 	if (g_sigint_received == SIGINT && shell)
 		shell->status = 130;
+	else if (shell)
+		shell->status = 1;
 }
 
 static int	handle_heredoc_redir(t_redir *redir, t_shell *shell, int child_mode)
@@ -50,19 +52,12 @@ static int	handle_heredoc_redir(t_redir *redir, t_shell *shell, int child_mode)
 
 	fd = handle_heredoc(redir->content, shell);
 	if (fd == -1)
-	{
-		handle_heredoc_error(shell, child_mode);
-		return (1);
-	}
+		return (handle_redir_error(shell, child_mode), 1);
 	if (dup2(fd, STDIN_FILENO) < 0)
 	{
 		print_errno("minishell", "dup2");
 		close(fd);
-		if (child_mode)
-			exit(1);
-		if (shell)
-			shell->status = 1;
-		return (1);
+		return (handle_redir_error(shell, child_mode), 1);
 	}
 	close(fd);
 	return (0);
@@ -78,22 +73,17 @@ static int	process_single_redir(t_redir *redir, t_shell *shell, int child_mode)
 		result = open_and_dup(redir->content, O_RDONLY, STDIN_FILENO, 0);
 	else if (redir->type == R_OUT || redir->type == R_APP)
 	{
+		flags = O_WRONLY | O_CREAT;
 		if (redir->type == R_OUT)
-			flags = O_WRONLY | O_CREAT | O_TRUNC;
+			flags |= O_TRUNC;
 		else
-			flags = O_WRONLY | O_CREAT | O_APPEND;
+			flags |= O_APPEND;
 		result = open_and_dup(redir->content, flags, STDOUT_FILENO, 0644);
 	}
 	else if (redir->type == R_HEREDOC)
 		return (handle_heredoc_redir(redir, shell, child_mode));
 	if (result != 0)
-	{
-		if (child_mode)
-			exit(1);
-		if (shell)
-			shell->status = 1;
-		return (1);
-	}
+		return (handle_redir_error(shell, child_mode), 1);
 	return (0);
 }
 

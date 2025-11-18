@@ -6,7 +6,7 @@
 /*   By: vpoelman <vpoelman@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 14:03:16 by vpoelman          #+#    #+#             */
-/*   Updated: 2025/10/17 23:40:27 by vpoelman         ###   ########.fr       */
+/*   Updated: 2025/11/17 19:58:09 by vpoelman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,29 +46,22 @@ char	*parse_word(char *input, int *i)
 }
 
 void	handle_field_splitting_main(char *expanded_word, t_token **head,
-		t_token **current)
+	t_token **current)
 {
 	char	**fields;
 	int		i;
 
-	fields = field_split(expanded_word);
+	fields = ft_split(expanded_word, ' ');
 	if (fields && fields[0])
-	{
-		i = 0;
-		while (fields[i])
 		{
-			if (fields[i] && *fields[i])
-				add_token_to_list(head, current, fields[i], TOKEN_WORD);
-			free(fields[i]);
-			i++;
-		}
-		free(fields);
-	}
-	else
-	{
-		if (expanded_word && *expanded_word)
-			add_token_to_list(head, current, expanded_word, TOKEN_WORD);
-		if (fields)
+			i = 0;
+			while (fields[i])
+			{
+				if (fields[i] && *fields[i])
+					add_token_to_list(head, current, fields[i], TOKEN_WORD);
+				free(fields[i]);
+				i++;
+			}
 			free(fields);
-	}
+		}
 }

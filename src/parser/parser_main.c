@@ -6,7 +6,7 @@
 /*   By: vpoelman <vpoelman@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 17:55:40 by vpoelman          #+#    #+#             */
-/*   Updated: 2025/11/04 02:10:00 by vpoelman         ###   ########.fr       */
+/*   Updated: 2025/11/17 20:25:52 by vpoelman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,6 @@ t_token	*tokenize(char *input, t_shell *shell)
 
 t_cmd	*parse_tokens(t_token *tokens)
 {
-	if (!tokens)
-		return (NULL);
 	if (!validate_syntax(tokens))
 		return (NULL);
 	return (parse_commands(tokens));

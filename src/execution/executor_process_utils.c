@@ -12,6 +12,17 @@
 
 #include "minishell.h"
 
+static void	handle_child_signal(int status, int *sigint_received)
+{
+	if (WTERMSIG(status) == SIGINT && !(*sigint_received))
+	{
+		write_stdout("\n");
+		*sigint_received = 1;
+	}
+	else if (WTERMSIG(status) == SIGPIPE)
+		write_error("minishell: write error: Broken pipe\n");
+}
+
 int	wait_for_children(pid_t *pids, int count)
 {
 	int	status;
@@ -27,15 +38,7 @@ int	wait_for_children(pid_t *pids, int count)
 		if (waitpid(pids[i], &status, 0) > 0)
 		{
 			if (WIFSIGNALED(status))
-			{
-				if (WTERMSIG(status) == SIGINT && !sigint_received)
-				{
-					write_stdout("\n");
-					sigint_received = 1;
-				}
-				else if (WTERMSIG(status) == SIGPIPE)
-					write_error("minishell: write error: Broken pipe\n");
-			}
+				handle_child_signal(status, &sigint_received);
 			if (i == count - 1)
 				last_status = get_process_exit_code(status);
 		}

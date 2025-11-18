@@ -73,12 +73,6 @@ typedef struct s_expand_ctx
 	size_t			i;
 }					t_expand_ctx;
 
-typedef struct s_quote_state
-{
-	int				in_single;
-	int				in_double;
-}					t_quote_state;
-
 typedef struct s_token_context
 {
 	t_token			*head;
@@ -134,7 +128,6 @@ int					builtin_env(t_shell *shell);
 int					builtin_exit(t_cmd *cmd, t_shell *shell);
 int					validate_exit_arg(char *arg);
 int					get_exit_code(char *arg, int default_code);
-char				*get_cd_path(char **args, t_shell *shell);
 int					is_valid_identifier(const char *str);
 int					process_export_arg(char *arg, t_shell *shell);
 int					handle_heredoc(char *delimiter, t_shell *shell);
@@ -142,7 +135,6 @@ void				process_heredoc_line(char *line, int fd, int quoted,
 						t_shell *shell);
 char				*expand_variables(char *str, t_shell *shell);
 char				*expand_variables_with_quotes(char *word, t_shell *shell);
-char				**field_split(char *str);
 void				resize_buffer(t_expand_ctx *ctx, size_t j);
 void				handle_dollar_expansion(char *clean_word, t_expand_ctx *ctx,
 						t_shell *shell);
@@ -150,14 +142,8 @@ void				expand_var(char *str, t_expand_ctx *ctx,
 						t_shell *shell);
 char				*get_env_value(char *name, char **env);
 char				**copy_env(char **env);
-char				**create_expanded_env(t_shell *shell, const char *key,
-						const char *value);
-int					copy_env_entries(char **new_env, char **env);
-int					replace_env_value(char **env_var, const char *key,
-						const char *value);
-void				compact_env_array(char **env, int remove_idx);
 int					set_env_var(t_shell *shell, const char *key,
-						const char *value);
+					const char *value);
 int					unset_env_var(t_shell *shell, const char *key);
 void				setup_signals(void);
 void				handle_sigint(int sig);
@@ -193,7 +179,6 @@ int					count_env_vars(char **env);
 int					read_heredoc_loop(int fd, char *delim, int quoted,
 						t_shell *shell);
 char				*extract_word(char const *s, char c, int start);
-int					handle_cd_execution(char *path, t_shell *shell);
 int					handle_export_with_value(char *arg, char *eq,
 						t_shell *shell);
 int					handle_export_without_value(char *arg);

@@ -21,9 +21,7 @@ SRCS = src/core/minishell_core.c \
        src/execution/executor_pipeline.c \
        src/execution/executor_execve_error.c \
        src/execution/executor_process_utils.c \
-       src/expansion/expansion_wildcard.c \
        src/expansion/expansion_variable_handlers.c \
-       src/expansion/expansion_char_handler.c \
        src/redirection/redirect.c \
        src/redirection/redirect_heredoc.c \
        src/utils/string_utils.c \
@@ -36,19 +34,17 @@ SRCS = src/core/minishell_core.c \
        src/builtins/builtin_main.c \
        src/builtins/builtin_echo_cd.c \
        src/builtins/builtin_cd_pwd.c \
-       src/builtins/cd_helpers.c \
        src/builtins/builtin_export_unset.c \
        src/builtins/export_arg_handlers.c \
        src/builtins/builtin_env_exit.c \
        src/builtins/builtin_exit_helpers.c \
        src/expansion/expansion.c \
        src/env/env_utils.c \
-       src/env/env_helpers.c \
+       src/env/env_set.c \
        src/utils/cleanup.c \
        src/utils/env_basic_utils.c \
        src/utils/error_utils.c \
-       src/utils/error_format.c \
-
+       src/utils/error_format.c
 
 OBJS = $(SRCS:.c=.o)
 

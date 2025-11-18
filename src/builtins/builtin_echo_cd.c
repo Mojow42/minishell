@@ -6,7 +6,7 @@
 /*   By: vpoelman <vpoelman@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 17:51:02 by vpoelman          #+#    #+#             */
-/*   Updated: 2025/10/22 23:35:29 by vpoelman         ###   ########.fr       */
+/*   Updated: 2025/11/17 23:26:38 by vpoelman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,4 @@ int	builtin_echo(t_cmd *cmd)
 	if (!n_flag)
 		write_stdout("\n");
 	return (0);
-}
-
-char	*get_cd_path(char **args, t_shell *shell)
-{
-	if (!args[1] || ft_strcmp(args[1], "~") == 0)
-		return (get_env_value("HOME", shell->env));
-	return (args[1]);
 }

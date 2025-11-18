@@ -21,9 +21,7 @@ static void	execute_child_process(t_cmd *cmd, t_shell *shell)
 			exit(130);
 		exit(1);
 	}
-	if (find_builtin_index(cmd->args[0]) != -1)
-		exit(execute_builtin(cmd, shell));
-	exit(exec_external_command(cmd->args, shell->env));
+	exit(execute_cmd(cmd, shell));
 }
 
 static int	wait_for_child(pid_t pid, t_shell *shell)
@@ -51,29 +49,27 @@ static int	wait_for_child(pid_t pid, t_shell *shell)
 int	execute_single_command(t_cmd *cmd, t_shell *shell)
 {
 	pid_t	pid;
+	int		result;
 
 	if (!cmd->args || !cmd->args[0])
 		return (0);
 	if (find_builtin_index(cmd->args[0]) != -1 && !cmd->redirs)
 		return (shell->status = execute_builtin(cmd, shell));
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 	pid = fork();
 	if (pid == 0)
 		execute_child_process(cmd, shell);
-	return (wait_for_child(pid, shell));
+	result = wait_for_child(pid, shell);
+	setup_signals();
+	return (result);
 }
 
 int	execute_commands(t_cmd *cmds, t_shell *shell)
 {
-	int	result;
-
 	if (!cmds)
 		return (1);
-	signal(SIGINT, SIG_IGN);
-	signal(SIGQUIT, SIG_IGN);
 	if (!cmds->next)
-		result = execute_single_command(cmds, shell);
-	else
-		result = execute_pipeline_loop(cmds, shell);
-	setup_signals();
-	return (result);
+		return (execute_single_command(cmds, shell));
+	return (execute_pipeline_loop(cmds, shell));
 }

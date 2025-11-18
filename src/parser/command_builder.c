@@ -6,7 +6,7 @@
 /*   By: vpoelman <vpoelman@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 17:53:29 by vpoelman          #+#    #+#             */
-/*   Updated: 2025/10/27 20:47:40 by vpoelman         ###   ########.fr       */
+/*   Updated: 2025/11/16 22:51:56 by vpoelman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,6 @@ t_token	*parse_command_tokens(t_cmd *cmd, t_token *tokens)
 		}
 		else if (is_redir_token(tokens->type))
 			tokens = handle_redir_token(cmd, tokens);
-		else
-			tokens = tokens->next;
 	}
 	return (tokens);
 }

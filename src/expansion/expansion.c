@@ -6,7 +6,7 @@
 /*   By: vpoelman <vpoelman@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 17:55:13 by vpoelman          #+#    #+#             */
-/*   Updated: 2025/11/03 23:27:12 by vpoelman         ###   ########.fr       */
+/*   Updated: 2025/11/16 21:53:09 by vpoelman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	resize_buffer(t_expand_ctx *ctx, size_t j)
 	ctx->buf_size = new_size;
 }
 
-void	expand_var(char *clean_word, t_expand_ctx *ctx, t_shell *shell)
+void	expand_var(char *word, t_expand_ctx *ctx, t_shell *shell)
 {
 	char	*var_name;
 	char	*val;
@@ -38,13 +38,13 @@ void	expand_var(char *clean_word, t_expand_ctx *ctx, t_shell *shell)
 	size_t	len;
 
 	start = ctx->i;
-	while (clean_word[ctx->i] && (ft_isalnum(clean_word[ctx->i])
-			|| clean_word[ctx->i] == '_'))
+	while (word[ctx->i] && (ft_isalnum(word[ctx->i])
+			|| word[ctx->i] == '_'))
 		ctx->i++;
 	len = ctx->i - start;
 	if (len == 0)
 		return ;
-	var_name = ft_strndup(clean_word + start, len);
+	var_name = ft_strndup(word + start, len);
 	if (!var_name)
 		return ;
 	val = get_env_value(var_name, shell->env);
@@ -59,7 +59,7 @@ void	expand_var(char *clean_word, t_expand_ctx *ctx, t_shell *shell)
 	free(var_name);
 }
 
-char	*expand_variables(char *clean_word, t_shell *shell)
+char	*expand_variables(char *word, t_shell *shell)
 {
 	t_expand_ctx	ctx;
 
@@ -69,15 +69,15 @@ char	*expand_variables(char *clean_word, t_shell *shell)
 	ctx.j = 0;
 	ctx.buf_size = 256;
 	ctx.i = 0;
-	while (clean_word[ctx.i])
+	while (word[ctx.i])
 	{
-		if (clean_word[ctx.i] == '$' && clean_word[ctx.i + 1])
-			handle_dollar_expansion(clean_word, &ctx, shell);
+		if (word[ctx.i] == '$' && word[ctx.i + 1])
+			handle_dollar_expansion(word, &ctx, shell);
 		else
 		{
 			while (ctx.j + 1 >= ctx.buf_size)
 				resize_buffer(&ctx, ctx.j);
-			ctx.result[ctx.j++] = clean_word[ctx.i++];
+			ctx.result[ctx.j++] = word[ctx.i++];
 		}
 	}
 	ctx.result[ctx.j] = '\0';

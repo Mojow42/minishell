@@ -6,7 +6,7 @@
 /*   By: vpoelman <vpoelman@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/23 16:10:00 by vpoelman          #+#    #+#             */
-/*   Updated: 2025/11/04 01:27:41 by vpoelman         ###   ########.fr       */
+/*   Updated: 2025/11/17 15:47:23 by vpoelman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,12 +50,12 @@ static void	process_input_line(char *input, t_shell *shell)
 	t_token	*tokens;
 	t_cmd	*cmds;
 
+	add_history(input);
 	if (has_unclosed_quotes(input))
 	{
 		write_error("minishell: syntax error: unclosed quotes\n");
 		return ;
 	}
-	add_history(input);
 	tokens = tokenize(input, shell);
 	if (tokens)
 	{

@@ -6,7 +6,7 @@
 /*   By: vpoelman <vpoelman@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 17:54:06 by vpoelman          #+#    #+#             */
-/*   Updated: 2025/11/02 19:52:38 by vpoelman         ###   ########.fr       */
+/*   Updated: 2025/11/17 23:31:02 by vpoelman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,11 +40,24 @@ char	**copy_env(char **env)
 	new_env = malloc(sizeof(char *) * (count + 1));
 	if (!new_env)
 		return (NULL);
-	i = copy_env_entries(new_env, env);
-	if (i == 0)
-		return (NULL);
+	i = -1;
+	while (env[++i])
+	{
+		new_env[i] = ft_strdup(env[i]);
+		if (!new_env[i])
+			return (cleanup_str_array(new_env), free(new_env), NULL);
+	}
 	new_env[i] = NULL;
 	return (new_env);
+}
+
+static void	compact_env_array(char **env, int remove_idx)
+{
+	while (env[remove_idx])
+	{
+		env[remove_idx] = env[remove_idx + 1];
+		remove_idx++;
+	}
 }
 
 int	unset_env_var(t_shell *shell, const char *key)
@@ -68,37 +81,3 @@ int	unset_env_var(t_shell *shell, const char *key)
 	return (1);
 }
 
-static int	update_existing_env_var(t_shell *shell, const char *key,
-		const char *value)
-{
-	int		i;
-	size_t	key_len;
-
-	key_len = ft_strlen(key);
-	i = 0;
-	while (shell->env[i])
-	{
-		if (ft_strncmp(shell->env[i], key, key_len) == 0
-			&& shell->env[i][key_len] == '=')
-			return (replace_env_value(&shell->env[i], key, value));
-		i++;
-	}
-	return (-1);
-}
-
-int	set_env_var(t_shell *shell, const char *key, const char *value)
-{
-	char	**new_env;
-	int		result;
-
-	result = update_existing_env_var(shell, key, value);
-	if (result != -1)
-		return (result);
-	new_env = create_expanded_env(shell, key, value);
-	if (!new_env)
-		return (1);
-	cleanup_str_array(shell->env);
-	free(shell->env);
-	shell->env = new_env;
-	return (0);
-}
