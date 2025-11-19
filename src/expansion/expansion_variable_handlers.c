@@ -6,7 +6,7 @@
 /*   By: vpoelman <vpoelman@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 02:48:52 by vpoelman          #+#    #+#             */
-/*   Updated: 2025/11/19 02:48:54 by vpoelman         ###   ########.fr       */
+/*   Updated: 2025/11/19 16:29:25 by vpoelman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,27 @@ void	handle_dollar_expansion(char *word, t_expand_ctx *ctx, t_shell *shell)
 	}
 }
 
+static void	handle_single_quotes(char *word, t_expand_ctx *ctx)
+{
+	ctx->i++;
+	while (word[ctx->i] && word[ctx->i] != '\'')
+	{
+		while (ctx->j + 1 >= ctx->buf_size)
+			resize_buffer(ctx, ctx->j);
+		ctx->result[ctx->j++] = word[ctx->i++];
+	}
+	if (word[ctx->i] == '\'')
+		ctx->i++;
+}
+
 static void	process_char_in_expansion(char *word, t_expand_ctx *ctx,
 		t_shell *shell)
 {
 	while (word[ctx->i])
 	{
-		if (word[ctx->i] == '"')
+		if (word[ctx->i] == '\'')
+			handle_single_quotes(word, ctx);
+		else if (word[ctx->i] == '"')
 			ctx->i++;
 		else if (word[ctx->i] == '$' && word[ctx->i + 1])
 			handle_dollar_expansion(word, ctx, shell);
