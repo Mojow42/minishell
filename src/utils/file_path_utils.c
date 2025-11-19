@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: vpoelman <vpoelman@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/23 16:25:00 by vpoelman          #+#    #+#             */
-/*   Updated: 2025/11/03 23:57:20 by vpoelman         ###   ########.fr       */
+/*   Created: 2025/11/19 02:49:58 by vpoelman          #+#    #+#             */
+/*   Updated: 2025/11/19 02:50:00 by vpoelman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,9 @@ static char	*handle_absolute_path(char *cmd)
 
 char	*find_executable(char *cmd, char **env)
 {
-	char		*path_env;
-	char		**paths;
-	char		*result;
+	char	*path_env;
+	char	**paths;
+	char	*result;
 
 	if (!cmd || !env)
 		return (NULL);

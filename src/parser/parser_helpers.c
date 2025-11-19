@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: vpoelman <vpoelman@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/09 17:55:37 by vpoelman          #+#    #+#             */
-/*   Updated: 2025/09/09 17:55:37 by vpoelman         ###   ########.fr       */
+/*   Created: 2025/11/19 02:49:08 by vpoelman          #+#    #+#             */
+/*   Updated: 2025/11/19 02:49:08 by vpoelman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,13 @@ static int	was_fully_quoted(char *word)
 			|| (word[0] == '\'' && word[len - 1] == '\'')));
 }
 
-static char	*process_word_expansion(char *word, t_token_context *ctx)
+static char	*process_word_expansion(char *word, t_token_context *ctx,
+		int keep_quotes)
 {
 	char	*expanded_word;
 
+	if (keep_quotes)
+		return (word);
 	if (should_expand_variable(word))
 		expanded_word = expand_variables_with_quotes(word, ctx->shell);
 	else
@@ -61,7 +64,9 @@ int	handle_word_token_main(char *input, int *i, t_token_context *ctx)
 	char	*word;
 	char	*expanded_word;
 	char	*original_word;
+	int		keep_quotes;
 
+	keep_quotes = (ctx->current && ctx->current->type == TOKEN_HEREDOC);
 	word = parse_word(input, i);
 	if (!word)
 		return (0);
@@ -71,7 +76,7 @@ int	handle_word_token_main(char *input, int *i, t_token_context *ctx)
 		free(word);
 		return (0);
 	}
-	expanded_word = process_word_expansion(word, ctx);
+	expanded_word = process_word_expansion(word, ctx, keep_quotes);
 	if (!expanded_word)
 	{
 		free(original_word);

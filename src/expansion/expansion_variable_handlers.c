@@ -5,15 +5,14 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: vpoelman <vpoelman@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/09 17:55:09 by vpoelman          #+#    #+#             */
-/*   Updated: 2025/11/17 17:17:59 by vpoelman         ###   ########.fr       */
+/*   Created: 2025/11/19 02:48:52 by vpoelman          #+#    #+#             */
+/*   Updated: 2025/11/19 02:48:54 by vpoelman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	handle_dollar_expansion(char *word, t_expand_ctx *ctx,
-		t_shell *shell)
+void	handle_dollar_expansion(char *word, t_expand_ctx *ctx, t_shell *shell)
 {
 	char	*val;
 	size_t	len;
@@ -41,7 +40,7 @@ void	handle_dollar_expansion(char *word, t_expand_ctx *ctx,
 }
 
 static void	process_char_in_expansion(char *word, t_expand_ctx *ctx,
-	t_shell *shell)
+		t_shell *shell)
 {
 	while (word[ctx->i])
 	{

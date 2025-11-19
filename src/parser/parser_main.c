@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: vpoelman <vpoelman@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/09 17:55:40 by vpoelman          #+#    #+#             */
-/*   Updated: 2025/11/17 20:25:52 by vpoelman         ###   ########.fr       */
+/*   Created: 2025/11/19 02:49:11 by vpoelman          #+#    #+#             */
+/*   Updated: 2025/11/19 02:49:13 by vpoelman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,33 @@ t_token	*tokenize(char *input, t_shell *shell)
 			handle_word_token_main(input, &i, &ctx);
 	}
 	return (ctx.head);
+}
+
+t_cmd	*parse_commands(t_token *tokens)
+{
+	t_cmd	*head;
+	t_cmd	*current;
+	t_cmd	*new_cmd;
+
+	head = NULL;
+	current = NULL;
+	while (tokens)
+	{
+		new_cmd = create_new_command();
+		if (!new_cmd)
+			return (NULL);
+		if (!head)
+			head = new_cmd;
+		else
+			current->next = new_cmd;
+		current = new_cmd;
+		tokens = parse_command_tokens(new_cmd, tokens);
+		if (!tokens)
+			break ;
+		if (tokens->type == TOKEN_PIPE)
+			tokens = tokens->next;
+	}
+	return (head);
 }
 
 t_cmd	*parse_tokens(t_token *tokens)

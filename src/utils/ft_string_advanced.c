@@ -5,12 +5,33 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: vpoelman <vpoelman@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/23 15:30:00 by vpoelman          #+#    #+#             */
-/*   Updated: 2025/09/26 23:40:31 by vpoelman         ###   ########.fr       */
+/*   Created: 2025/11/19 02:50:02 by vpoelman          #+#    #+#             */
+/*   Updated: 2025/11/19 02:50:04 by vpoelman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	*ft_memcpy(void *dst, const void *src, size_t n)
+{
+	unsigned char		*d;
+	const unsigned char	*s;
+	size_t				i;
+
+	if (!dst && !src)
+		return (NULL);
+	if (n == 0)
+		return (dst);
+	d = dst;
+	s = src;
+	i = 0;
+	while (i < n)
+	{
+		d[i] = s[i];
+		i++;
+	}
+	return (dst);
+}
 
 char	*ft_strndup(const char *s, size_t n)
 {

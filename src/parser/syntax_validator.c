@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: vpoelman <vpoelman@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/10 14:03:00 by vpoelman          #+#    #+#             */
-/*   Updated: 2025/11/03 23:28:12 by vpoelman         ###   ########.fr       */
+/*   Created: 2025/11/19 02:49:15 by vpoelman          #+#    #+#             */
+/*   Updated: 2025/11/19 02:51:25 by vpoelman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,7 @@ static int	validate_pipe_syntax(t_token *tokens, t_token *check)
 {
 	if (check->type == TOKEN_PIPE)
 	{
-		if (check == tokens || !check->next
-			|| check->next->type == TOKEN_PIPE)
+		if (check == tokens || !check->next || check->next->type == TOKEN_PIPE)
 		{
 			write_error("minishell: syntax error near unexpected token `|'\n");
 			return (0);

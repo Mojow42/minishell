@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: vpoelman <vpoelman@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/15 00:00:00 by vpoelman          #+#    #+#             */
-/*   Updated: 2025/10/15 00:00:00 by vpoelman         ###   ########.fr       */
+/*   Created: 2025/11/19 02:48:31 by vpoelman          #+#    #+#             */
+/*   Updated: 2025/11/19 02:48:31 by vpoelman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@ int	get_process_exit_code(int status)
 
 static int	is_permission_error(int err)
 {
-	return (err == EISDIR || err == EACCES || err == ENOTDIR
-		|| err == ELOOP || err == ETXTBSY);
+	return (err == EISDIR || err == EACCES || err == ENOTDIR || err == ELOOP
+		|| err == ETXTBSY);
 }
 
 static int	print_exec_error(char *cmd, char *path)

@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: vpoelman <vpoelman@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/27 00:00:00 by vpoelman          #+#    #+#             */
-/*   Updated: 2025/10/27 22:35:00 by vpoelman         ###   ########.fr       */
+/*   Created: 2025/11/19 02:48:38 by vpoelman          #+#    #+#             */
+/*   Updated: 2025/11/19 02:48:38 by vpoelman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,8 @@ static void	setup_child_pipes(t_cmd *cmd, t_exec_ctx *ctx, int pfd[2])
 	if (cmd->next)
 	{
 		if (!has_output_redir(cmd->redirs))
-		{
 			dup2(pfd[1], STDOUT_FILENO);
-			close(pfd[1]);
-		}
-		else
-			close(pfd[1]);
+		close(pfd[1]);
 		close(pfd[0]);
 	}
 }
@@ -71,43 +67,30 @@ static int	fork_and_execute(t_cmd *current, t_shell *shell, t_exec_ctx *ctx,
 	return (0);
 }
 
-static int	init_pipeline_ctx(t_cmd *cmds, t_exec_ctx *ctx)
-{
-	int	count;
-
-	count = count_commands(cmds);
-	ctx->pids = malloc(sizeof(pid_t) * count);
-	if (!ctx->pids)
-		return (-1);
-	ctx->pid_count = 0;
-	ctx->prev_pipe = -1;
-	return (0);
-}
-
 int	execute_pipeline_loop(t_cmd *cmds, t_shell *shell)
 {
 	t_exec_ctx	ctx;
 	int			pipefd[2];
 	t_cmd		*current;
-	int			count;
+	int			result;
 
-	if (init_pipeline_ctx(cmds, &ctx) != 0)
+	ctx.pids = malloc(sizeof(pid_t) * count_commands(cmds));
+	if (!ctx.pids)
 		return (-1);
+	ctx.pid_count = 0;
+	ctx.prev_pipe = -1;
 	signal(SIGINT, SIG_IGN);
 	signal(SIGQUIT, SIG_IGN);
 	current = cmds;
 	while (current)
 	{
 		if (current->next && pipe(pipefd) == -1)
-		{
-			write_error("minishell: pipe failed\n");
-			return (free(ctx.pids), setup_signals(), 1);
-		}
+			return (write_error("minishell: pipe failed\n"), free(ctx.pids),
+				setup_signals(), 1);
 		if (fork_and_execute(current, shell, &ctx, pipefd) != 0)
 			return (free(ctx.pids), setup_signals(), 1);
 		current = current->next;
 	}
-	count = wait_for_children(ctx.pids, ctx.pid_count);
-	setup_signals();
-	return (free(ctx.pids), count);
+	result = wait_for_children(ctx.pids, ctx.pid_count);
+	return (setup_signals(), free(ctx.pids), result);
 }

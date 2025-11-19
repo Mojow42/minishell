@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: vpoelman <vpoelman@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/17 23:45:00 by vpoelman          #+#    #+#             */
-/*   Updated: 2025/11/17 23:45:00 by vpoelman         ###   ########.fr       */
+/*   Created: 2025/11/19 02:48:23 by vpoelman          #+#    #+#             */
+/*   Updated: 2025/11/19 02:48:23 by vpoelman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,4 +76,3 @@ int	set_env_var(t_shell *shell, const char *key, const char *value)
 	shell->env = new_env;
 	return (0);
 }
-

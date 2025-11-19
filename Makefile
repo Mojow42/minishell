@@ -1,3 +1,15 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: vpoelman <vpoelman@student.s19.be>         +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2025/11/19 02:53:18 by vpoelman          #+#    #+#              #
+#    Updated: 2025/11/19 02:53:19 by vpoelman         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 NAME = minishell
 
 CC = gcc
@@ -8,13 +20,11 @@ SRCS = src/core/minishell_core.c \
        src/core/signals_setup.c \
        src/parser/parser_main.c \
        src/parser/parser_helpers.c \
-       src/parser/parser_core.c \
        src/parser/tokenizer.c \
        src/parser/word_parser.c \
        src/parser/word_parser_helpers.c \
        src/parser/syntax_validator.c \
        src/parser/command_builder.c \
-       src/parser/command_arrays.c \
        src/parser/command_token_handlers.c \
        src/execution/executor_command.c \
        src/execution/executor_single.c \
@@ -24,7 +34,6 @@ SRCS = src/core/minishell_core.c \
        src/expansion/expansion_variable_handlers.c \
        src/redirection/redirect.c \
        src/redirection/redirect_heredoc.c \
-       src/utils/string_utils.c \
        src/utils/ft_string.c \
        src/utils/ft_string_advanced.c \
        src/utils/conversion_utils.c \
@@ -32,7 +41,7 @@ SRCS = src/core/minishell_core.c \
        src/utils/memory_macros.c \
        src/utils/split_utils.c \
        src/builtins/builtin_main.c \
-       src/builtins/builtin_echo_cd.c \
+       src/builtins/builtin_echo.c \
        src/builtins/builtin_cd_pwd.c \
        src/builtins/builtin_export_unset.c \
        src/builtins/export_arg_handlers.c \

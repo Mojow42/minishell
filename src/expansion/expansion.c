@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: vpoelman <vpoelman@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/09 17:55:13 by vpoelman          #+#    #+#             */
-/*   Updated: 2025/11/16 21:53:09 by vpoelman         ###   ########.fr       */
+/*   Created: 2025/11/19 02:48:56 by vpoelman          #+#    #+#             */
+/*   Updated: 2025/11/19 02:48:58 by vpoelman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,7 @@ void	expand_var(char *word, t_expand_ctx *ctx, t_shell *shell)
 	size_t	len;
 
 	start = ctx->i;
-	while (word[ctx->i] && (ft_isalnum(word[ctx->i])
-			|| word[ctx->i] == '_'))
+	while (word[ctx->i] && (ft_isalnum(word[ctx->i]) || word[ctx->i] == '_'))
 		ctx->i++;
 	len = ctx->i - start;
 	if (len == 0)

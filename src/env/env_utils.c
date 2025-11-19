@@ -5,12 +5,25 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: vpoelman <vpoelman@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/09 17:54:06 by vpoelman          #+#    #+#             */
-/*   Updated: 2025/11/17 23:31:02 by vpoelman         ###   ########.fr       */
+/*   Created: 2025/11/19 02:48:27 by vpoelman          #+#    #+#             */
+/*   Updated: 2025/11/19 02:48:29 by vpoelman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+char	*ft_format_env(const char *key, const char *value)
+{
+	char	*result;
+	char	*temp;
+
+	temp = ft_strjoin(key, "=");
+	if (!temp)
+		return (NULL);
+	result = ft_strjoin(temp, value);
+	free(temp);
+	return (result);
+}
 
 char	*get_env_value(char *name, char **env)
 {
@@ -80,4 +93,3 @@ int	unset_env_var(t_shell *shell, const char *key)
 	}
 	return (1);
 }
-

@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: vpoelman <vpoelman@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/10 17:15:00 by vpoelman          #+#    #+#             */
-/*   Updated: 2025/11/04 02:10:00 by vpoelman         ###   ########.fr       */
+/*   Created: 2025/11/19 02:49:32 by vpoelman          #+#    #+#             */
+/*   Updated: 2025/11/19 02:49:34 by vpoelman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,18 +41,6 @@ void	process_heredoc_line(char *line, int fd, int quoted, t_shell *shell)
 	free(line);
 }
 
-static int	handle_sigint_in_heredoc(t_shell *shell)
-{
-	if (g_sigint_received == SIGINT)
-	{
-		if (shell)
-			shell->status = 130;
-		g_sigint_received = 0;
-		return (-1);
-	}
-	return (0);
-}
-
 int	read_heredoc_loop(int fd, char *delim, int quoted, t_shell *shell)
 {
 	char	*line;
@@ -62,15 +50,17 @@ int	read_heredoc_loop(int fd, char *delim, int quoted, t_shell *shell)
 		line = readline("> ");
 		if (!line)
 		{
-			if (handle_sigint_in_heredoc(shell) == -1)
+			if (g_sigint_received == SIGINT)
+			{
+				if (shell)
+					shell->status = 130;
+				g_sigint_received = 0;
 				return (-1);
+			}
 			break ;
 		}
 		if (ft_strcmp(line, delim) == 0)
-		{
-			free(line);
-			break ;
-		}
+			return (free(line), 0);
 		process_heredoc_line(line, fd, quoted, shell);
 	}
 	return (0);
@@ -86,13 +76,12 @@ int	handle_heredoc(char *delimiter, t_shell *shell)
 	if (pipe(fd) == -1)
 		return (-1);
 	delim = clean_delimiter(delimiter, &quoted);
+	if (!delim)
+		return (close(fd[0]), close(fd[1]), -1);
 	result = read_heredoc_loop(fd[1], delim, quoted, shell);
 	close(fd[1]);
 	free(delim);
 	if (result == -1)
-	{
-		close(fd[0]);
-		return (-1);
-	}
+		return (close(fd[0]), -1);
 	return (fd[0]);
 }
