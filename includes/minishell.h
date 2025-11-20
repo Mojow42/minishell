@@ -151,7 +151,7 @@ int								handle_heredoc(char *delimiter, t_shell *shell);
 void							process_heredoc_line(char *line, int fd,
 									int quoted, t_shell *shell);
 char							*expand_variables(char *str, t_shell *shell);
-char							*expand_variables_with_quotes(char *word,
+char							*expand_and_process_quotes(char *word,
 									t_shell *shell);
 void							resize_buffer(t_expand_ctx *ctx, size_t j);
 void							handle_dollar_expansion(char *clean_word,

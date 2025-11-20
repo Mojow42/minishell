@@ -37,7 +37,7 @@ static char	*process_word_expansion(char *word, t_token_context *ctx,
 	if (keep_quotes)
 		return (word);
 	if (should_expand_variable(word))
-		expanded_word = expand_variables_with_quotes(word, ctx->shell);
+		expanded_word = expand_and_process_quotes(word, ctx->shell);
 	else
 		expanded_word = remove_quotes(word);
 	free(word);

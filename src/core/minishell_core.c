@@ -6,7 +6,7 @@
 /*   By: vpoelman <vpoelman@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 02:48:14 by vpoelman          #+#    #+#             */
-/*   Updated: 2025/11/19 02:48:16 by vpoelman         ###   ########.fr       */
+/*   Updated: 2025/11/20 00:15:59 by vpoelman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,16 +76,16 @@ void	shell_loop(t_shell *shell)
 	g_sigint_received = 0;
 	while (1)
 	{
-		if (g_sigint_received == SIGINT)
-		{
-			shell->status = 130;
-			g_sigint_received = 0;
-		}
 		input = readline(PROMPT);
 		if (!input)
 		{
 			write_stdout("exit\n");
 			break ;
+		}
+		if (g_sigint_received == SIGINT)
+		{
+			shell->status = 130;
+			g_sigint_received = 0;
 		}
 		if (*input)
 			process_input_line(input, shell);
